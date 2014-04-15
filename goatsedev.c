@@ -1793,8 +1793,6 @@ MODULE_LICENSE("GPL");
 #define DEVICE_NAME "goatse"	  /* Dev name as it appears in /proc/devices   */
 
 static int Major;		    /* Major number assigned to our device driver */
-static int Device_Open = 0;	/* Is device open?  
-				             * Used to prevent multiple access to device */
 
 static ssize_t
 device_write(struct file *filp, const char *buff, size_t len, loff_t * off)
@@ -1805,14 +1803,7 @@ device_write(struct file *filp, const char *buff, size_t len, loff_t * off)
 
 static int device_open(struct inode *inode, struct file *file)
 {
-
-	if (Device_Open)
-		return -EBUSY;
-
-	Device_Open++;
-    
-	try_module_get(THIS_MODULE); /* marks this module as in use*/
-
+	try_module_get(THIS_MODULE);  /* marks this module as in use*/
 	return 0;
 }
 
@@ -1833,7 +1824,7 @@ static ssize_t device_read(struct file *filp,	/* see include/linux/fs.h   */
 	 */
 	while (length) {
 
-		put_user(*(msg_Ptr), buffer++);
+		put_user(*(msg_Ptr), buffer++); /* Performance fix todo */
 
         if (msg_Ptr == (char *) ( _tmp_hello_jpg + _tmp_hello_jpg_len - 1)) {
             msg_Ptr = _tmp_hello_jpg;
@@ -1853,14 +1844,7 @@ static ssize_t device_read(struct file *filp,	/* see include/linux/fs.h   */
 
 static int device_release(struct inode *inode, struct file *file)
 {
-	Device_Open--;		/* We're now ready for our next caller */
-
-	/* 
-	 * Decrement the usage count, or else once you opened the file, you'll
-	 * never get get rid of the module. 
-	 */
 	module_put(THIS_MODULE); 
-
 	return 0;
 }
 
@@ -1876,8 +1860,8 @@ static int __init startup(void)
     Major = register_chrdev(0, DEVICE_NAME, &fops);
 
 	if (Major < 0) {
-	  printk(KERN_ALERT "[goatse] Registering char device failed with %d\n", Major);
-	  return Major;
+        printk(KERN_ALERT "[goatse] Registering char device failed with %d\n", Major);
+        return Major;
 	}
 
 	printk(KERN_INFO "[goatse] I was assigned major number %d.\n* g o a t s e x * g o a t s e x * g o a t s e x *\ng                                               g  \no /     \\             \\            /    \\       o\na|       |             \\          |      |      a\nt|       `.             |         |       :     t\ns`        |             |        \\|       |     s\ne \\       | /       /  \\\\   --__ \\       :    e\nx  \\      \\/   _--~~          ~--__| \\     |    x  \n*   \\      \\_-~                    ~-_\\    |    *\ng    \\_     \\        _.--------.______\\|   |    g\no      \\     \\______// _ ___ _ (_(__>  \\   |    o\na       \\   .  C ___)  ______ (_(____>  |  /    a\nt       /\\ |   C ____)/      \\ (_____>  |_/     t\n", Major);
@@ -1892,7 +1876,6 @@ static void __exit shutdown(void)
 	 */
     printk(KERN_INFO "[goatse] Unplugging character device\n");
 	unregister_chrdev(Major, DEVICE_NAME);
-
 }
 
 module_init(startup);
