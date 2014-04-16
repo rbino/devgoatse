@@ -1813,14 +1813,14 @@ static ssize_t device_read(struct file *filp,	/* see include/linux/fs.h   */
 			   loff_t * offset)
 {
 	/*
-	 * Number of bytes actually written to the buffer 
+	 * Number of bytes actually written to the buffer
 	 */
 	int bytes_read = 0;
 
     char *msg_Ptr = _tmp_hello_jpg + ((unsigned int) (*offset) % _tmp_hello_jpg_len);
 
-	/* 
-	 * Actually put the data into the buffer 
+	/*
+	 * Actually put the data into the buffer
 	 */
 	while (length) {
 
@@ -1836,7 +1836,7 @@ static ssize_t device_read(struct file *filp,	/* see include/linux/fs.h   */
 		bytes_read++;
 	}
 
-	/* 
+	/*
 	 * Most read functions return the number of bytes put into the buffer
 	 */
 	return bytes_read; // Usually we don't return 0 because goatse it's infinite... trololol
@@ -1844,7 +1844,7 @@ static ssize_t device_read(struct file *filp,	/* see include/linux/fs.h   */
 
 static int device_release(struct inode *inode, struct file *file)
 {
-	module_put(THIS_MODULE); 
+	module_put(THIS_MODULE);
 	return 0;
 }
 
@@ -1864,15 +1864,15 @@ static int __init startup(void)
         return Major;
 	}
 
-	printk(KERN_INFO "[goatse] I was assigned major number %d.\n* g o a t s e x * g o a t s e x * g o a t s e x *\ng                                               g  \no /     \\             \\            /    \\       o\na|       |             \\          |      |      a\nt|       `.             |         |       :     t\ns`        |             |        \\|       |     s\ne \\       | /       /  \\\\   --__ \\       :    e\nx  \\      \\/   _--~~          ~--__| \\     |    x  \n*   \\      \\_-~                    ~-_\\    |    *\ng    \\_     \\        _.--------.______\\|   |    g\no      \\     \\______// _ ___ _ (_(__>  \\   |    o\na       \\   .  C ___)  ______ (_(____>  |  /    a\nt       /\\ |   C ____)/      \\ (_____>  |_/     t\n", Major);
-    printk(KERN_INFO "s      / /\\|   C_____)       |  (___>   /  \\    s\ne     |   (   _C_____)\\______/  // _/ /     \\   e\nx     |    \\  |__   \\_________// (__/       |  x\n*    | \\    \\____)   `----   --'             |  *\ng    |  \\_          ___\\       /_          _/ | g\no   |              /    |     |  \\            | o\na   |             |    /       \\  \\           | a\nt   |          / /    |         |  \\           |t\ns   |         / /      \\__/\\___/    |          |s\ne  |           /        |    |       |         |e\nx  |          |         |    |       |         |x\n* g o a t s e x * g o a t s e x * g o a t s e x *\n");
+	printk(KERN_INFO "[goatse] I was assigned major number %d.\n* g o a t s e x * g o a t s e x * g o a t s e x *\ng                                               g  \no /     \\             \\            /    \\       o\na|       |             \\          |      |      a\nt|       `.             |         |       :     t\ns`        |             |        \\|       |     s\ne \\       | /       /  \\\\\\   --__ \\\\       :    e\nx  \\      \\/   _--~~          ~--__| \\     |    x  \n*   \\      \\_-~                    ~-_\\    |    *\ng    \\_     \\        _.--------.______\\|   |    g\no      \\     \\______// _ ___ _ (_(__>  \\   |    o\na       \\   .  C ___)  ______ (_(____>  |  /    a\nt       /\\ |   C ____)/      \\ (_____>  |_/     t\n", Major);
+    printk(KERN_INFO "s      / /\\|   C_____)       |  (___>   /  \\    s\ne     |   (   _C_____)\\______/  // _/ /     \\   e\nx     |    \\\\  |__   \\_________// (__/       |  x\n*    | \\    \\____)   `----   --'             |  *\ng    |  \\_          ___\\       /_          _/ | g\no   |              /    |     |  \\            | o\na   |             |    /       \\  \\           | a\nt   |          / /    |         |  \\           |t\ns   |         / /      \\__/\\___/    |          |s\ne  |           /        |    |       |         |e\nx  |          |         |    |       |         |x\n* g o a t s e x * g o a t s e x * g o a t s e x *\n");
 	return 0;
 }
 
 static void __exit shutdown(void)
 {
-	/* 
-	 * Unregister the device 
+	/*
+	 * Unregister the device
 	 */
     printk(KERN_INFO "[goatse] Unplugging character device\n");
 	unregister_chrdev(Major, DEVICE_NAME);
